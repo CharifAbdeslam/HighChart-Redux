@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getData,getLive} from '../actions/index';
+import {getData} from '../actions/index';
 import {Container} from 'reactstrap';
 import Highcharts from 'highcharts/highstock';
 import StockChart from './Stock.jsx';
@@ -9,31 +9,23 @@ require('highcharts/indicators/ema')(Highcharts);
 
 class App extends Component {
 
+
   componentWillMount() {
     this.props.getData();
-    this.props.getLive();
   }
 
   render() {
-    const {data,live} = this.props
-    var updated=[]
-    updated.push([live[0],live[1],live[3],live[4],live[2],live[5]])
+    const {data} = this.props
     var stockOptions = {
       chart: {
         height: 600
-      }, events: {
-            load: function () {
-             setInterval(function () {
-             }, 1000);
-            }
-        },
+      },
       xAxis: {
         gridLineWidth: 1,
         lineWidth: 2
       },
       yAxis: [
         {
-
           height: '80%',
           labels: {
             align: 'left',
@@ -61,7 +53,7 @@ class App extends Component {
 
         {
           type: 'candlestick',
-          data: data.concat(updated),
+          data:data,
           name: 'ETH/BTC',
           id: 'aapl'
         }, {
@@ -82,16 +74,11 @@ class App extends Component {
         }, {
           type: 'column',
           name: 'Volume',
-          data: (()=>{
-              return data.concat(updated).map(i => ([
-                 i[0], i[5]
-               ]));
-          })(),
           yAxis: 1
         }, {
           type: 'area',
           name: 'Line',
-          data: data.concat(updated),
+          data: data,
           yAxis: 2,
           threshold: null,
           tooltip: {
@@ -109,7 +96,6 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.candle.all,
-  live: state.livedata.live
+  data: state.candle.all
 })
-export default connect(mapStateToProps, {getData,getLive})(App);
+export default connect(mapStateToProps, {getData})(App);

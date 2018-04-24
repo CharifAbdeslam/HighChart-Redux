@@ -6,8 +6,6 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_DATA:
       return Object.assign({},state,{all:action.payload})
-    case LIVE_DATA:
-    return Object.assign({},state,{live:action.payload})
     default:
      return state;
   }
